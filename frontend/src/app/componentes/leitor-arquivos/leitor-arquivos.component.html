@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="alert alert-danger" *ngIf="erroNoServidor">Erro no servidor</div>
+
+    <div class="seletor" *ngIf="arquivo.length === 0">
+        <select [(ngModel)]="data">
+            <option value="10">10 dias</option>
+            <option value="15">15 dias</option>
+            <option value="20">20 dias</option>
+            <option value="30">30 dias</option>
+            <option value="-1">Todos</option>
+        </select>
+        <!--<select >
+            <option *ngFor="let opcao of opcoes" [value]="opcao">{{opcao}}</option>
+        </select>-->
+        <input type="text" [(ngModel)]="mensagemFiltro">
+        <button class="btn btn-secondary btn-sm" style="margin-left: 5px;" (click)="buscarArquivos()">
+            Buscar arquivos</button>
+    </div>
+
+
+    <div class="tabela" *ngIf="arquivo.length === 0">
+        <table class="table table-bordered shadow-lg">
+            <thead>
+                <tr>
+                    <th>Nome do arquivo</th>
+                    <th>Data Criação</th>
+                    <th>Quantidade de erros</th>
+                    <th>Verificar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let arquivo of arquivos">
+                    <td>{{arquivo.nomeDoArquivo}}</td>
+                    <td>{{arquivo.dataCriacao | date:'dd/MM/yyyy'}}</td>
+                    <td>{{arquivo.erros.length}}</td>
+                    <td><button class="btn btn-secondary  btn-sm" (click)="verificarArquivo(arquivo)">Verificar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="seletor" *ngIf="arquivo.length > 0">
+        <input type="text" [(ngModel)]="conteudo">
+        <button class="btn btn-secondary  btn-sm" (click)="arquivo = []">voltar</button>
+
+        <div class="leitor">
+
+            <div *ngFor="let linha of arquivo;let i = index"
+                [ngClass]="{filtro: conteudo !== '' && linha.toUpperCase().includes(conteudo.toUpperCase())}">
+                <span>{{i+ 1}} -</span>
+                {{linha}}
+            </div>
+        </div>
+    </div>
+
+</div>
